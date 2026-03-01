@@ -10,8 +10,14 @@ from datetime import datetime
 st.sidebar.title("Configuración")
 api_key = st.sidebar.text_input("Ingresa tu OpenAI API Key", type="password")
 
-if api_key:
+if "OPENAI_API_KEY" in st.secrets:
+    api_key = st.secrets["OPENAI_API_KEY"]
     client = OpenAI(api_key=api_key)
+else:
+    # Por si acaso olvidas configurarlo, que lo pida en el sidebar
+    api_key = st.sidebar.text_input("Ingresa tu OpenAI API Key", type="password")
+    if api_key:
+        client = OpenAI(api_key=api_key)
 
 # 2. Definición de Delitos Art. 6 (Para que la IA sepa qué buscar)
 DELITOS_ART6 = "Narcotráfico, extorsión, secuestro, trata de personas, corrupción, peculado, soborno, enriquecimiento ilícito, evasión de impuestos, tráfico de armas."
